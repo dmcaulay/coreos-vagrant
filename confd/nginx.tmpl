@@ -1,0 +1,13 @@
+upstream apache_pool {
+{{ range $server := .services_apache }}
+    server {{ $server.Value }};
+{{ end }}
+}
+
+server {
+    access_log /var/log/nginx/access.log upstreamlog;
+
+    location / {
+        proxy_pass http://apache_pool;
+    }
+}
